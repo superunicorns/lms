@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface TitleFormProps {
   initialData: {
@@ -40,7 +41,12 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      await axios.patch(`/api/courses/${courseId}`, values);
+      toast.success("Course updated");
+    } catch {
+      toast.error("Something went wrong")
+    }
   }
 
   return (
